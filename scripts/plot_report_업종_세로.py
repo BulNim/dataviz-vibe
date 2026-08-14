@@ -18,19 +18,19 @@ fig, ax = plt.subplots(figsize=(10, 6))
 bars = ax.bar(grouped.index, grouped.values, color=colors)
 ax.set_title("업종별 총 거래금액 (큰 순서)", fontsize=18, fontweight="bold")
 ax.set_xlabel("가맹점업종", fontsize=14, fontweight="bold")
-ax.set_ylabel("총 거래금액 (원)", fontsize=14, fontweight="bold")
+ax.set_ylabel("총 거래금액 (천원)", fontsize=14, fontweight="bold")
 ax.tick_params(axis="x", rotation=30, labelsize=12)
 ax.tick_params(axis="y", labelsize=12)
 
-# 세로축 눈금이 1.2e8 같은 지수표현으로 나오면 일반인이 읽기 어려우므로
-# 천단위 콤마가 찍힌 원 단위 숫자로 바꿈. 배경 눈금선도 켜서 막대 높이를 눈으로 비교하기 쉽게 함
-ax.yaxis.set_major_formatter(FuncFormatter(lambda x, _: f"{x:,.0f}"))
+# 원 단위 그대로 쓰면 자릿수가 너무 길어(예: 126,354,008) 눈에 안 들어오므로
+# 1000으로 나눈 천원 단위로 눈금·막대 라벨을 표시함. 배경 눈금선도 켜서 막대 높이를 눈으로 비교하기 쉽게 함
+ax.yaxis.set_major_formatter(FuncFormatter(lambda x, _: f"{x/1000:,.0f}"))
 ax.grid(axis="y", linestyle="--", alpha=0.4, zorder=0)
 ax.set_axisbelow(True)
 
 for bar in bars:
     height = bar.get_height()
-    ax.annotate(f"{height:,.0f}원", xy=(bar.get_x() + bar.get_width() / 2, height),
+    ax.annotate(f"{height/1000:,.0f}천원", xy=(bar.get_x() + bar.get_width() / 2, height),
                 xytext=(0, 4), textcoords="offset points", ha="center", va="bottom",
                 fontsize=11, fontweight="bold")
 
