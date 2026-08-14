@@ -23,6 +23,8 @@ ax.set_xlabel("결제수단", fontsize=14, fontweight="bold")
 ax.set_ylabel("거래 건수", fontsize=14, fontweight="bold")
 ax.tick_params(axis="x", labelsize=12)
 ax.tick_params(axis="y", labelsize=12)
+ax.grid(axis="y", linestyle="--", alpha=0.4, zorder=0)
+ax.set_axisbelow(True)
 
 for bar, p in zip(bars, pct):
     height = bar.get_height()
