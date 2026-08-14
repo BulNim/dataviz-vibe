@@ -17,7 +17,7 @@ counts = df["결제수단"].value_counts(dropna=True).sort_values(ascending=Fals
 pct = counts / counts.sum() * 100
 
 fig, ax = plt.subplots(figsize=(10, 6))
-bars = ax.bar(counts.index, counts.values, color="#4C72B0")
+bars = ax.bar(counts.index, counts.values, color="#E08E45")
 ax.set_title("결제수단별 거래 건수 및 비율", fontsize=18, fontweight="bold")
 ax.set_xlabel("결제수단", fontsize=14, fontweight="bold")
 ax.set_ylabel("거래 건수", fontsize=14, fontweight="bold")

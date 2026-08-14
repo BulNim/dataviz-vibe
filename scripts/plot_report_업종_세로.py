@@ -11,7 +11,7 @@ df = pd.read_csv("data/핀테크_정제완료.csv", encoding="utf-8-sig")
 
 grouped = df.groupby("가맹점업종")["거래금액"].sum().sort_values(ascending=False)
 
-colors = ["#D62728"] + ["#4C72B0"] * (len(grouped) - 1)
+colors = ["#C0392B"] + ["#F0A868"] * (len(grouped) - 1)
 
 fig, ax = plt.subplots(figsize=(10, 6))
 bars = ax.bar(grouped.index, grouped.values, color=colors)
