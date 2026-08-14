@@ -30,8 +30,15 @@ df = df.drop_duplicates()
 n3 = len(df)
 print(f"3단계(완전 중복 제거) 후: {n3}행 ({before - n3}건 감소)")
 
+# 4. 음수 거래금액 제거 - 부호가 뒤집힌 값이 섞여 있으면 합계·분포(박스플롯 등)가 왜곡됨.
+# CLAUDE.md 기본 규칙상 정제 단계에서는 안 건드리지만, 이번엔 별도로 지시받아 제거함
+before = len(df)
+df = df[df["거래금액"] >= 0]
+n4 = len(df)
+print(f"4단계(음수 거래금액 제거) 후: {n4}행 ({before - n4}건 감소)")
+
 df.to_csv(DST, index=False, encoding="utf-8-sig")
 
 print()
-print(f"정제 전: {n0}행 -> 정제 후: {n3}행 (총 {n0 - n3}건 감소)")
+print(f"정제 전: {n0}행 -> 정제 후: {n4}행 (총 {n0 - n4}건 감소)")
 print(f"저장 완료: {DST}")
