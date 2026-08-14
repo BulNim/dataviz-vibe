@@ -4,6 +4,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)) + "/..")
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import matplotlib.patheffects as pe
 
 mpl.rcParams["font.family"] = "Malgun Gothic"
 mpl.rcParams["axes.unicode_minus"] = False
@@ -38,16 +39,35 @@ print("저장 완료: output/charts/월별_거래금액_추이.png")
 # ---------- 2) 결제수단별 거래금액 비중 - 도넛 차트 ----------
 pay = df.groupby("결제수단")["거래금액"].sum().sort_values(ascending=False)
 pct = pay / pay.sum() * 100
+# 비율(pay) 순서에 맞춰 건수도 같이 뽑음 - 조각 옆에 "39.2%\n(4,605건)"처럼 같이 보여주기 위함
+cnt = df["결제수단"].value_counts().reindex(pay.index)
+total_cnt = df["결제수단"].notna().sum()
 
 fig2, ax2 = plt.subplots(figsize=(8, 8))
 colors = plt.cm.Oranges_r([i / len(pay) * 0.7 for i in range(len(pay))])
 wedges, texts, autotexts = ax2.pie(
-    pay.values, labels=pay.index, autopct="%.1f%%", startangle=90,
-    pctdistance=0.8, colors=colors,
+    pay.values, labels=pay.index,
+    autopct=lambda p: f"{p:.1f}%",  # 아래에서 건수 줄을 직접 덧붙이므로 우선 비율만 넣음
+    startangle=90,
+    pctdistance=0.78, colors=colors,
     wedgeprops=dict(width=0.4, edgecolor="white"),
     textprops=dict(fontsize=12, fontweight="bold"),
 )
+
+# 비율 글씨는 밝은/어두운 조각 어디에 있든 잘 보이도록 흰색 + 검정 테두리(outline)로 그림
+for at, c in zip(autotexts, cnt.values):
+    at.set_color("white")
+    at.set_fontsize(12)
+    at.set_fontweight("bold")
+    at.set_text(f"{at.get_text()}\n({c:,}건)")
+    at.set_path_effects([pe.withStroke(linewidth=2.5, foreground="black")])
+
 ax2.set_title("결제수단별 거래금액 비중", fontsize=18, fontweight="bold")
+
+# 도넛 가운데 빈 공간에 전체 결제 건수를 적음 - 비중만 보여주고 전체 규모(모수)가 안 보이면 오해하기 쉬움
+ax2.text(0, 0, f"전체\n{total_cnt:,}건", ha="center", va="center",
+          fontsize=15, fontweight="bold")
+
 ax2.axis("equal")
 
 fig2.tight_layout()
