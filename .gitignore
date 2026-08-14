@@ -1,0 +1,7 @@
+.venv/
+.tmp/
+output/
+scripts/_chart_*.png
+scripts/_clean_report.csv
+__pycache__/
+*.pyc
